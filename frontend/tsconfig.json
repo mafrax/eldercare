@@ -1,0 +1,14 @@
+{
+  "compilerOptions": {
+    "jsx": "react-jsx", // For React 17+
+    "esModuleInterop": true,
+    "strict": true,
+    "outDir": "./dist",
+    "rootDir": "./src",
+    "module": "commonjs",
+    "target": "es6"
+    // other options
+  },
+  "include": ["src/**/*"],
+  "exclude": ["node_modules"]
+}

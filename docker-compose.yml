@@ -1,0 +1,43 @@
+version: '3.8'
+
+services:
+  db:
+    image: mysql:8.0
+    container_name: eldercare_db
+    environment:
+      MYSQL_ROOT_PASSWORD: rootpassword
+      MYSQL_DATABASE: eldercare_db
+      MYSQL_USER: eldercare_user
+      MYSQL_PASSWORD: userpassword
+    ports:
+      - "3306:3306"
+    volumes:
+      - db_data:/var/lib/mysql
+
+  user-service:
+    build: ./user-service
+    container_name: user-service
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:mysql://db:3306/eldercare_db
+      SPRING_DATASOURCE_USERNAME: eldercare_user
+      SPRING_DATASOURCE_PASSWORD: userpassword
+    ports:
+      - "8080:8080"
+      - "8081:8081"
+      - "5005:5005"  # Expose debug port
+    depends_on:
+      - db
+    command: >
+      java -agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=*:5005
+      -jar user-service.jar
+
+  frontend:
+    build: ./frontend
+    container_name: frontend
+    ports:
+      - "80:80"
+    depends_on:
+      - user-service
+
+volumes:
+  db_data:

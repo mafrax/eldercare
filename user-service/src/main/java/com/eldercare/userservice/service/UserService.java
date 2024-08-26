@@ -1,5 +1,6 @@
 package com.eldercare.userservice.service;
 
+import com.eldercare.userservice.dto.RegistrationRequest;
 import com.eldercare.userservice.model.User;
 import com.eldercare.userservice.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,9 +18,12 @@ public class UserService {
     @Autowired
     private PasswordEncoder passwordEncoder;
 
-    public User registerUser(User user) {
-        user.setPassword(passwordEncoder.encode(user.getPassword()));
-        return userRepository.save(user);
+    public void registerUser(RegistrationRequest request) {
+        User user = new User();
+        user.setUsername(request.getUsername());
+        user.setEmail(request.getEmail());
+        user.setPassword(passwordEncoder.encode(request.getPassword()));
+        userRepository.save(user);
     }
 
     public Optional<User> loginUser(String username, String password) {

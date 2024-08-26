@@ -1,5 +1,6 @@
 package com.eldercare.userservice.controller;
 
+import com.eldercare.userservice.dto.RegistrationRequest;
 import com.eldercare.userservice.model.User;
 import com.eldercare.userservice.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,16 +11,16 @@ import org.springframework.web.bind.annotation.*;
 import java.util.Optional;
 
 @RestController
-@RequestMapping("/users")
+@RequestMapping("/api/users")
 public class UserController {
 
     @Autowired
     private UserService userService;
 
     @PostMapping("/register")
-    public ResponseEntity<User> registerUser(@RequestBody User user) {
-        User createdUser = userService.registerUser(user);
-        return ResponseEntity.status(HttpStatus.CREATED).body(createdUser);
+    public ResponseEntity<String> registerUser(@RequestBody RegistrationRequest user) {
+        userService.registerUser(user);
+        return ResponseEntity.ok("User registered successfully");
     }
 
     @PostMapping("/login")
